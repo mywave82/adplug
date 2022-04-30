@@ -115,6 +115,7 @@ const CPlayerDesc CAdPlug::allplayers[] = {
   CPlayerDesc(CcffLoader::factory, "Boomtracker", ".cff\0"),
   CPlayerDesc(CdmoLoader::factory, "TwinTeam", ".dmo\0"),
   CPlayerDesc(Cs3mPlayer::factory, "Scream Tracker 3", ".s3m\0"),
+  CPlayerDesc(Cs3mPlayer::factory, "Scream Tracker 3 (adlib renamed file)", ".as3m\0"),
   CPlayerDesc(CdtmLoader::factory, "DeFy Adlib Tracker", ".dtm\0"),
   CPlayerDesc(CfmcLoader::factory, "Faust Music Creator", ".sng\0"),
   CPlayerDesc(CmtkLoader::factory, "MPU-401 Trakker", ".mtk\0"),
