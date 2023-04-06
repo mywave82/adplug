@@ -85,6 +85,11 @@ bool CxadhybridPlayer::xadplayer_load()
 {
 	if(xad.fmt != HYBRID) return false;
 
+	if (tune_size < (0xade + 64*2))
+	{ /* absolute minimum */
+		return false;
+	}
+
 	// load instruments
 	hyb.inst = (hyb_instrument *)&tune[0];
 
@@ -134,7 +139,7 @@ void CxadhybridPlayer::gettrackdata(unsigned char pattern, void (*callback)(void
   for (int channel = 0; channel < 9; channel++) {
     if (((unsigned long)pattern*9 + channel + 0x1d4) >= tune_size) return; /* buffer overflow */
     for (int row = 0; row < 64; row++) {
-      unsigned char posoffset = 0xADE + (hyb.order[pattern*9 + channel] * 64 * 2) + (row * 2);
+      unsigned long posoffset = 0xADE + (hyb.order[pattern*9 + channel] * 64 * 2) + (row * 2);
       if (((unsigned long)posoffset + 1) >= tune_size) break; /* buffer overflow */
 
       unsigned char *pos = &tune[posoffset];
@@ -206,7 +211,13 @@ void CxadhybridPlayer::xadplayer_update()
 	// process channels
 	for (i=0;i<9;i++)
 	{
-		unsigned char *pos = &tune[0xADE + (hyb.order[hyb.order_pos*9 + i] * 64 * 2) + (patpos * 2)];
+		if (((unsigned long)hyb.order_pos*9 + i + 0x1d4) >= tune_size) { std::cerr << "WARNING1\n"; break; /* buffer overflow */ }
+
+		unsigned long posoffset = 0xADE + (hyb.order[hyb.order_pos*9 + i] * 64 * 2) + (patpos * 2);
+
+		if (((unsigned long)posoffset + 1) >= tune_size) { std::cerr << "WARNING2\n"; break; /* buffer overflow */ }
+
+		unsigned char *pos = &tune[posoffset];
 		// read event
 		unsigned short event = (pos[1] << 8) + pos[0];
 
