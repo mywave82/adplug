@@ -30,7 +30,7 @@ class Cd00Player: public CPlayer
   static CPlayer *factory(Copl *newopl);
 
   Cd00Player(Copl *newopl)
-    : CPlayer(newopl), filedata(0)
+    : CPlayer(newopl), inst(0), spfx(0), levpuls(0), channel(), songend(0), version(0), cursubsong(0), datainfo(0), seqptr(0), header(0), header1(0), filedata(0), filesize(0)
     { };
   ~Cd00Player()
     { if(filedata) delete [] filedata; };
