@@ -30,14 +30,14 @@ class CrixPlayer: public CPlayer
   CrixPlayer(Copl *newopl);
   ~CrixPlayer();
 
-  bool load(const std::string &filename, const CFileProvider &fp);
-  bool update();
-  void rewind(int subsong);
-  float getrefresh();
-  unsigned int getsubsongs();
-  unsigned int getsubsong();
+  bool load(const std::string &filename, const CFileProvider &fp) override;
+  bool update() override;
+  void rewind(int subsong) override;
+  float getrefresh() override;
+  unsigned int getsubsongs() override;
+  unsigned int getsubsong() override;
 
-  std::string gettype()
+  std::string gettype() override
     { return std::string("Softstar RIX OPL Music Format"); };
 
  protected:	

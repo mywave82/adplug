@@ -28,14 +28,14 @@ class CcffLoader: public CmodPlayer
 
   CcffLoader(Copl *newopl) : CmodPlayer(newopl) { };
 
-  bool	load(const std::string &filename, const CFileProvider &fp);
-  void	rewind(int subsong);
+  bool	load(const std::string &filename, const CFileProvider &fp) override;
+  void	rewind(int subsong) override;
 
-  std::string		gettype();
-  std::string		gettitle();
-  std::string		getauthor();
-  std::string		getinstrument(unsigned int n);
-  unsigned int	getinstruments();
+  std::string		gettype() override;
+  std::string		gettitle() override;
+  std::string		getauthor() override;
+  std::string		getinstrument(unsigned int n) override;
+  unsigned int	getinstruments() override;
 
  private:
 

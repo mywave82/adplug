@@ -105,26 +105,26 @@ protected:
     } channel[9];
   } rat;
   //
-  bool            xadplayer_load();
-  void            xadplayer_rewind(int subsong);
-  void            xadplayer_update();
-  float           xadplayer_getrefresh();
-  std::string     xadplayer_gettype();
-  std::string     xadplayer_gettitle();
-  unsigned int    xadplayer_getinstruments();
+  bool            xadplayer_load() override;
+  void            xadplayer_rewind(int subsong) override;
+  void            xadplayer_update() override;
+  float           xadplayer_getrefresh() override;
+  std::string     xadplayer_gettype() override;
+  std::string     xadplayer_gettitle() override;
+  unsigned int    xadplayer_getinstruments() override;
 
-  unsigned int getpatterns() { return rat.hdr.numpat; }
-  unsigned int getpattern() { return rat.order[rat.order_pos]; }
-  unsigned char getpattern(unsigned long order)
+  unsigned int getpatterns() override { return rat.hdr.numpat; }
+  unsigned int getpattern() override { return rat.order[rat.order_pos]; }
+  unsigned char getpattern(unsigned long order) override
   {
     if (order >= rat.hdr.order_end ) return 0;
     return rat.order[order];
   }
-  unsigned int getorders() { return rat.hdr.order_end; }
-  unsigned int getorder() { return rat.order_pos; }
-  unsigned int getrow() { return rat.pattern_pos; }
-  unsigned int getrows() { return 64; }
-  unsigned int getnchans() { return rat.hdr.numchan; }
-  unsigned int getspeed() { return plr.speed; }
+  unsigned int getorders() override { return rat.hdr.order_end; }
+  unsigned int getorder() override { return rat.order_pos; }
+  unsigned int getrow() override { return rat.pattern_pos; }
+  unsigned int getrows() override { return 64; }
+  unsigned int getnchans() override { return rat.hdr.numchan; }
+  unsigned int getspeed() override { return plr.speed; }
   void gettrackdata(unsigned char pattern, void (*callback)(void *arg, unsigned char row, unsigned char channel, unsigned char note, TrackedCmds command, unsigned char inst, unsigned char volume, unsigned char param), void *arg) override;
 };

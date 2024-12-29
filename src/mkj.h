@@ -32,12 +32,12 @@ public:
 	~CmkjPlayer()
 	{ if(songbuf) delete [] songbuf; }
 
-	bool load(const std::string &filename, const CFileProvider &fp);
-	bool update();
-	void rewind(int subsong);
-	float getrefresh();
+	bool load(const std::string &filename, const CFileProvider &fp) override;
+	bool update() override;
+	void rewind(int subsong) override;
+	float getrefresh() override;
 
-	std::string gettype()
+	std::string gettype() override
 	{ return std::string("MKJamz Audio File"); }
 
 private:

@@ -31,25 +31,25 @@ class ChscPlayer: public CPlayer
 
   ChscPlayer(Copl *newopl): CPlayer(newopl), mtkmode(0) {}
 
-  bool load(const std::string &filename, const CFileProvider &fp);
-  bool update();
-  void rewind(int subsong);
-  float getrefresh() { return 18.2f; };	// refresh rate is fixed at 18.2Hz
+  bool load(const std::string &filename, const CFileProvider &fp) override;
+  bool update() override;
+  void rewind(int subsong) override;
+  float getrefresh() override{ return 18.2f; };	// refresh rate is fixed at 18.2Hz
 
-  std::string gettype() { return std::string("HSC Adlib Composer / HSC-Tracker"); }
-  unsigned int getpatterns();
-  unsigned int getpattern() { return song[songpos]; }
-  unsigned int getorders();
-  unsigned int getorder() { return songpos; }
-  unsigned int getrow() { return pattpos; }
-  unsigned int getrows() { return 64; }
-  unsigned int getnchans() { return 9; }
-  unsigned char getpattern(unsigned long ordr);
+  std::string gettype() override { return std::string("HSC Adlib Composer / HSC-Tracker"); }
+  unsigned int getpatterns() override;
+  unsigned int getpattern() override { return song[songpos]; }
+  unsigned int getorders() override;
+  unsigned int getorder() override { return songpos; }
+  unsigned int getrow() override { return pattpos; }
+  unsigned int getrows() override { return 64; }
+  unsigned int getnchans() override { return 9; }
+  unsigned char getpattern(unsigned long ordr) override;
 
   void gettrackdata(unsigned char pattern, void (*callback)(void *arg, unsigned char row, unsigned char channel, unsigned char note, TrackedCmds command, unsigned char inst, unsigned char volume, unsigned char param), void *arg) override;
 
-  unsigned int getspeed() { return speed; }
-  unsigned int getinstruments();
+  unsigned int getspeed() override { return speed; }
+  unsigned int getinstruments() override;
 
  protected:
   struct hscnote {

@@ -41,17 +41,17 @@ public:
 	~CrawPlayer()
 	{ if (data) delete[] data; };
 
-	bool load(const std::string &filename, const CFileProvider &fp);
-	bool update();
-	void rewind(int subsong);
-	float getrefresh();
+	bool load(const std::string &filename, const CFileProvider &fp) override;
+	bool update() override;
+	void rewind(int subsong) override;
+	float getrefresh() override;
 
 	// Wraithverge: RAC originally captured these files, not RdosPlay.
-	std::string gettype() { return std::string("Raw AdLib Capture"); };
+	std::string gettype() override { return std::string("Raw AdLib Capture"); };
 
-	std::string gettitle() { return std::string(title, 0, 40); };
-	std::string getauthor() { return std::string(author, 0, 60); };
-	std::string getdesc() { return std::string(desc, 0, 1023); };
+	std::string gettitle() override { return std::string(title, 0, 40); };
+	std::string getauthor() override { return std::string(author, 0, 60); };
+	std::string getdesc() override { return std::string(desc, 0, 1023); };
 
 protected:
 	struct Tdata {

@@ -44,20 +44,20 @@ public:
 
     ~CrolPlayer();
 
-    bool  load      (const std::string &filename, const CFileProvider &fp);
-    bool  update    ();
-    void  frontend_rewind(int subsong);	// rewinds to specified subsong
-    float getrefresh();			// returns needed timer refresh rate
+    bool  load      (const std::string &filename, const CFileProvider &fp) override;
+    bool  update    () override;
+    void  frontend_rewind(int subsong) override;	// rewinds to specified subsong
+    float getrefresh() override;	// returns needed timer refresh rate
 
-    unsigned int getinstruments()
+    unsigned int getinstruments() override
     {
         return usedInstruments.size();
     };
-    std::string getinstrument(unsigned int n)
+    std::string getinstrument(unsigned int n) override
     {
         return n < usedInstruments.size() ? usedInstruments[n] : std::string();
     };
-    std::string getdesc()
+    std::string getdesc() override
     {
         return strcmp(mpROLHeader->comment, "\\roll\\default") ? std::string(mpROLHeader->comment) : std::string();
     };

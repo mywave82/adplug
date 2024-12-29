@@ -71,16 +71,16 @@ protected:
     } channel[9];
   } bmf;
   //
-  bool            xadplayer_load();
-  void            xadplayer_rewind(int subsong);
-  void            xadplayer_update();
-  float           xadplayer_getrefresh();
-  std::string     xadplayer_gettype();
-  std::string     xadplayer_gettitle();
-  std::string     xadplayer_getauthor();
-  std::string     xadplayer_getinstrument(unsigned int i);
-  unsigned int    xadplayer_getinstruments();
-  unsigned int    xadplayer_getspeed();
+  bool            xadplayer_load() override;
+  void            xadplayer_rewind(int subsong) override;
+  void            xadplayer_update() override;
+  float           xadplayer_getrefresh() override;
+  std::string     xadplayer_gettype() override;
+  std::string     xadplayer_gettitle() override;
+  std::string     xadplayer_getauthor() override;
+  std::string     xadplayer_getinstrument(unsigned int i) override;
+  unsigned int    xadplayer_getinstruments() override;
+  unsigned int    xadplayer_getspeed() override;
   //
 private:
   static const unsigned char bmf_adlib_registers[117];

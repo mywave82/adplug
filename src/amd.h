@@ -31,18 +31,18 @@ public:
 		: CmodPlayer(newopl)
 	{ };
 
-	bool load(const std::string &filename, const CFileProvider &fp);
-	float getrefresh();
+	bool load(const std::string &filename, const CFileProvider &fp) override;
+	float getrefresh() override;
 
-	std::string gettype()
+	std::string gettype() override
 	{ return std::string("AMUSIC Adlib Tracker"); }
-	std::string gettitle()
+	std::string gettitle() override
 	{ return std::string(songname, strnlen(songname, sizeof(songname))); }
-	std::string getauthor()
+	std::string getauthor() override
 	{ return std::string(author, strnlen(author, sizeof(author))); }
-	unsigned int getinstruments()
+	unsigned int getinstruments() override
 	{ return 26; }
-	std::string getinstrument(unsigned int n)
+	std::string getinstrument(unsigned int n) override
 	{ return n < getinstruments() ? std::string(instname[n], strnlen(instname[n], sizeof(instname[n]))) : std::string(); }
 
 private:

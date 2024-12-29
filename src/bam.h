@@ -32,13 +32,13 @@ public:
 	~CbamPlayer()
 	{ if(song) delete [] song; };
 
-	bool load(const std::string &filename, const CFileProvider &fp);
-	bool update();
-	void rewind(int subsong);
-	float getrefresh()
+	bool load(const std::string &filename, const CFileProvider &fp) override;
+	bool update() override;
+	void rewind(int subsong) override;
+	float getrefresh() override
 	{ return 25.0f; };
 
-	std::string gettype()
+	std::string gettype() override
 	{ return std::string("Bob's Adlib Music"); };
 
 private:
