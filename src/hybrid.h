@@ -82,7 +82,7 @@ protected:
 	// Wraithverge: added this.
 	unsigned int    xadplayer_getspeed();
 
-	unsigned int getpatters() { return 256; } // need to parse data and detect the real length by review of breaks/jumps
+	unsigned int getpatterns() { return 256; } // need to parse data and detect the real length by review of breaks/jumps
 	unsigned int getpattern() { return hyb.order_pos; } // since channels multiplex orders to build a pattern
 	unsigned char getpattern(unsigned long order) { return order; } // since channels multiplex orders to build a pattern
 	unsigned int getorders() { return 256; } // need to parse data and detect the real length by review of breaks/jumps
