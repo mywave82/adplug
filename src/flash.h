@@ -36,16 +36,16 @@ protected:
     unsigned char   pattern_pos;
   } flash;
   //
-  bool		  xadplayer_load()
+  bool		  xadplayer_load() override
     {
       if (xad.fmt == FLASH && tune_size >= 0x633 + 18)
 	return true;
       else
 	return false;
     }
-  void            xadplayer_rewind(int subsong);
-  void            xadplayer_update();
-  float           xadplayer_getrefresh();
-  std::string     xadplayer_gettype();
-  unsigned int    xadplayer_getinstruments();
+  void            xadplayer_rewind(int subsong) override;
+  void            xadplayer_update() override;
+  float           xadplayer_getrefresh() override;
+  std::string     xadplayer_gettype() override;
+  unsigned int    xadplayer_getinstruments() override;
 };

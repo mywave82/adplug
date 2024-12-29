@@ -38,19 +38,19 @@ public:
 	CxadPlayer(Copl * newopl);
 	~CxadPlayer();
 
-	bool	load(const std::string &filename, const CFileProvider &fp);
-	bool	update();
-	void	rewind(int subsong);
-	float	getrefresh();
+	bool	load(const std::string &filename, const CFileProvider &fp) override;
+	bool	update() override;
+	void	rewind(int subsong) override;
+	float	getrefresh() override;
 
-	std::string     gettype();
-	std::string     gettitle();
-	std::string     getauthor();
-	std::string     getinstrument(unsigned int i);
-	unsigned int    getinstruments();
+	std::string     gettype() override;
+	std::string     gettitle() override;
+	std::string     getauthor() override;
+	std::string     getinstrument(unsigned int i) override;
+	unsigned int    getinstruments() override;
 
 	// Wraithverge: added this.
-	unsigned int    getspeed();
+	unsigned int    getspeed() override;
 
 protected:
 	virtual void xadplayer_rewind(int subsong) = 0;

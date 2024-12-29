@@ -31,14 +31,14 @@ class CplxPlayer: public CPlayer
   CplxPlayer(Copl *newopl);
   virtual ~CplxPlayer();
 
-  bool load(const std::string &filename, const CFileProvider &fp);
-  virtual bool update();
-  virtual void rewind(int subsong = -1);
-  float getrefresh() { return 1193182.0f / (speed_scale * speed); }
+  bool load(const std::string &filename, const CFileProvider &fp) override;
+  bool update() override;
+  void rewind(int subsong = -1) override;
+  float getrefresh() override { return 1193182.0f / (speed_scale * speed); }
 
-  std::string gettype() { return std::string("PALLADIX Sound System"); }
-  unsigned int getrow() { return songpos; }
-  unsigned int getspeed() { return speed_scale; }
+  std::string gettype() override { return std::string("PALLADIX Sound System"); }
+  unsigned int getrow() override { return songpos; }
+  unsigned int getspeed() override { return speed_scale; }
 
  private:
   static const unsigned short	frequency[];

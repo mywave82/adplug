@@ -35,27 +35,27 @@ public:
 	virtual ~Crad2Player();
 
 	/***** Operational methods *****/
-	bool load(const std::string &filename, const CFileProvider &fp = CProvider_Filesystem());
-	bool update();
-	void rewind(int subsong = -1);
-	float getrefresh();
+	bool load(const std::string &filename, const CFileProvider &fp = CProvider_Filesystem()) override;
+	bool update() override;
+	void rewind(int subsong = -1) override;
+	float getrefresh() override;
 
 	/***** Informational methods *****/
-	std::string gettype();
-	std::string getdesc()         { return desc; }
+	std::string gettype() override;
+	std::string getdesc() override         { return desc; }
 
-	unsigned int getpatterns();
-	unsigned int getinstruments();
-	unsigned int getpattern();
-	unsigned int getorders();
-	unsigned int getorder();
-	unsigned int getrow();
-	unsigned int getrows();
-	unsigned int getnchans();
-	unsigned char getpattern(unsigned long order);
+	unsigned int getpatterns() override;
+	unsigned int getinstruments() override;
+	unsigned int getpattern() override;
+	unsigned int getorders() override;
+	unsigned int getorder() override;
+	unsigned int getrow() override;
+	unsigned int getrows() override;
+	unsigned int getnchans() override;
+	unsigned char getpattern(unsigned long order) override;
         void gettrackdata(unsigned char pattern, void (*callback)(void *arg, unsigned char row, unsigned char channel, unsigned char note, TrackedCmds command, unsigned char inst, unsigned char volume, unsigned char param), void *arg) override;
-	unsigned int getspeed();
-	std::string getinstrument(unsigned int n);
+	unsigned int getspeed() override;
+	std::string getinstrument(unsigned int n) override;
 
 protected:
 	RADPlayer *rad;

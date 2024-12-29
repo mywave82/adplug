@@ -35,12 +35,12 @@ public:
     CpisPlayer(Copl *newopl) : CPlayer(newopl){};
     ~CpisPlayer(){};
 
-    bool load(const std::string &filename, const CFileProvider &fp);
-    bool update();
-    void rewind(int subsong);
-    float getrefresh();
+    bool load(const std::string &filename, const CFileProvider &fp) override;
+    bool update() override;
+    void rewind(int subsong) override;
+    float getrefresh() override;
 
-    std::string gettype() { return std::string("Beni Tracker PIS module"); };
+    std::string gettype() override { return std::string("Beni Tracker PIS module"); };
 
 private:
     typedef struct {
@@ -151,24 +151,24 @@ private:
     PisReplayState replay_state;
     int is_playing;
 
-    unsigned int getpatterns()
+    unsigned int getpatterns() override
       { return module.number_of_patterns; }
-    unsigned int getpattern()
+    unsigned int getpattern() override
       { return module.pattern_map[replay_state.position]; }
-    unsigned int getorders()
+    unsigned int getorders() override
       { return module.length; }
-    unsigned int getorder()
+    unsigned int getorder() override
       { return replay_state.position; }
-    unsigned int getrow()
+    unsigned int getrow() override
       { return replay_state.row; }
-    unsigned int getrows()
+    unsigned int getrows() override
       { return 64; }
-    unsigned int getnchans()
+    unsigned int getnchans() override
       { return 9; }
-    unsigned int getspeed()
+    unsigned int getspeed() override
       { return replay_state.speed; }
 
-    unsigned char getpattern(unsigned long _order)
+    unsigned char getpattern(unsigned long _order) override
       { if (_order >= module.length) return 0; return module.pattern_map[_order]; }
     void gettrackdata(unsigned char pattern, void (*callback)(void *arg, unsigned char row, unsigned char channel, unsigned char note, TrackedCmds command, unsigned char inst, unsigned char volume, unsigned char param), void *arg) override;
 };

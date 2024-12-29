@@ -47,10 +47,10 @@ protected:
     unsigned short  ptr[nchannels];
   } psi;
   //
-  bool	          xadplayer_load();
-  void            xadplayer_rewind(int subsong);
-  void            xadplayer_update();
-  float           xadplayer_getrefresh();
-  std::string     xadplayer_gettype();
-  unsigned int    xadplayer_getinstruments();
+  bool	          xadplayer_load() override;
+  void            xadplayer_rewind(int subsong) override;
+  void            xadplayer_update() override;
+  float           xadplayer_getrefresh() override;
+  std::string     xadplayer_gettype() override;
+  unsigned int    xadplayer_getinstruments() override;
 };

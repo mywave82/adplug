@@ -30,15 +30,15 @@ public:
 		: CmodPlayer(newopl)
 	{ };
 
-	bool load(const std::string &filename, const CFileProvider &fp);
-	float getrefresh();
+	bool load(const std::string &filename, const CFileProvider &fp) override;
+	float getrefresh() override;
 
-	std::string gettype();
-	unsigned int getinstruments()
+	std::string gettype() override;
+	unsigned int getinstruments() override
 	{ return 32; };
-	std::string getinstrument(unsigned int n)
+	std::string getinstrument(unsigned int n) override
 	{ if (n < 32 && *instname[n]) return std::string(instname[n] + 1, *instname[n]); else return std::string(); };
-	std::string getdesc()
+	std::string getdesc() override
 	{ return std::string(songinfo + 1, *songinfo); };
 
 private:

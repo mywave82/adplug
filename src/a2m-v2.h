@@ -681,16 +681,16 @@ public:
     Ca2mv2Player(Copl *newopl);
     ~Ca2mv2Player();
 
-    bool load(const std::string &filename, const CFileProvider &fp);
-    bool update();
-    void rewind(int subsong);
-    float getrefresh();
+    bool load(const std::string &filename, const CFileProvider &fp) override;
+    bool update() override;
+    void rewind(int subsong) override;
+    float getrefresh() override;
 
-    std::string gettype();
-    std::string gettitle() { return std::string(songinfo->songname); }
-    std::string getauthor() { return std::string(songinfo->composer); }
-    unsigned int getinstruments() { return instrinfo->count; }
-    std::string getinstrument(unsigned int n) { return std::string(n < instrinfo->count ? songinfo->instr_names[n] : ""); }
+    std::string gettype() override;
+    std::string gettitle() override { return std::string(songinfo->songname); }
+    std::string getauthor() override { return std::string(songinfo->composer); }
+    unsigned int getinstruments() override { return instrinfo->count; }
+    std::string getinstrument(unsigned int n) override { return std::string(n < instrinfo->count ? songinfo->instr_names[n] : ""); }
 
 private:
     uint8_t current_order = 0;

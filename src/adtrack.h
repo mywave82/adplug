@@ -30,12 +30,12 @@ public:
 		: CmodPlayer(newopl)
 	{ };
 
-	bool load(const std::string &filename, const CFileProvider &fp);
-	float getrefresh();
+	bool load(const std::string &filename, const CFileProvider &fp) override;
+	float getrefresh() override;
 
-	std::string gettype()
+	std::string gettype() override
 	{ return std::string("Adlib Tracker 1.0"); };
-	unsigned int getinstruments()
+	unsigned int getinstruments() override
 	{ return 9; };
 
 private:

@@ -90,16 +90,16 @@ class CcmfPlayer: public CPlayer
 		CcmfPlayer(Copl *newopl);
 		~CcmfPlayer();
 
-		bool load(const std::string &filename, const CFileProvider &fp);
-		bool update();
-		void rewind(int subsong);
-		float getrefresh();
+		bool load(const std::string &filename, const CFileProvider &fp) override;
+		bool update() override;
+		void rewind(int subsong) override;
+		float getrefresh() override;
 
-		std::string gettype()
+		std::string gettype() override
 			{ return std::string("Creative Music File (CMF)"); };
-		std::string gettitle();
-		std::string getauthor();
-		std::string getdesc();
+		std::string gettitle() override;
+		std::string getauthor() override;
+		std::string getdesc() override;
 
 	protected:
 		uint32_t readMIDINumber();
