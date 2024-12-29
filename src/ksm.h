@@ -32,17 +32,17 @@ public:
 	~CksmPlayer()
 	{ if(note) delete [] note; };
 
-	bool load(const std::string &filename, const CFileProvider &fp);
-	bool update();
-	void rewind(int subsong);
-	float getrefresh()
+	bool load(const std::string &filename, const CFileProvider &fp) override;
+	bool update() override;
+	void rewind(int subsong) override;
+	float getrefresh() override
 	{ return 240.0f; };
 
-	std::string gettype()
+	std::string gettype() override
 	{ return std::string("Ken Silverman's Music Format"); };
-	unsigned int getinstruments()
+	unsigned int getinstruments() override
 	{ return 16; };
-	std::string getinstrument(unsigned int n);
+	std::string getinstrument(unsigned int n) override;
 
 private:
 	static const unsigned int adlibfreq[63];

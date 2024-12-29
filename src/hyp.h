@@ -35,17 +35,17 @@ protected:
     unsigned short  pointer;
   } hyp;
   //
-  bool		    xadplayer_load()
+  bool		    xadplayer_load() override
     {
       if (xad.fmt == HYP && tune_size >= 0x69 + 9)
 	return true;
       else
 	return false;
     }
-  void 		    xadplayer_rewind(int subsong);
-  void 		    xadplayer_update();
-  float 	    xadplayer_getrefresh();
-  std::string	    xadplayer_gettype();
+  void 		    xadplayer_rewind(int subsong) override;
+  void 		    xadplayer_update() override;
+  float 	    xadplayer_getrefresh() override;
+  std::string	    xadplayer_gettype() override;
 
 private:
   static const unsigned char hyp_adlib_registers[99];

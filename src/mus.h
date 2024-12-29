@@ -78,28 +78,28 @@ public:
 		if (insts) delete[] insts;
 	};
 
-	bool load(const std::string &filename, const CFileProvider &fp);
-	bool update();
-	void frontend_rewind(int subsong);
+	bool load(const std::string &filename, const CFileProvider &fp) override;
+	bool update() override;
+	void frontend_rewind(int subsong) override;
 
-	float getrefresh()
+	float getrefresh() override
 	{
 		return timer;
 	};
 
-	std::string gettitle()
+	std::string gettitle() override
 	{
 		return std::string(tuneName);
 	};
 
-	std::string gettype();
+	std::string gettype() override;
 
-	unsigned int getinstruments()
+	unsigned int getinstruments() override
 	{
 		return insts ? nrTimbre : 0;
 	};
 
-	std::string getinstrument(unsigned int n)
+	std::string getinstrument(unsigned int n) override
 	{
 		return insts && n < nrTimbre ?
 			(insts[n].backend_index >= 0 ?

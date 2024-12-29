@@ -29,21 +29,21 @@ class CldsPlayer: public CPlayer
   CldsPlayer(Copl *newopl);
   virtual ~CldsPlayer();
 
-  bool load(const std::string &filename, const CFileProvider &fp);
-  virtual bool update();
-  virtual void rewind(int subsong = -1);
-  float getrefresh() { return 1193182.0f / speed; }
+  bool load(const std::string &filename, const CFileProvider &fp) override;
+  bool update() override;
+  void rewind(int subsong = -1) override;
+  float getrefresh() override { return 1193182.0f / speed; }
 
-  std::string gettype() { return std::string("LOUDNESS Sound System"); }
-  unsigned int getorders() { return numposi; }
-  unsigned int getorder() { return posplay; }
-  unsigned char getpattern(unsigned long order) { return order; }
+  std::string gettype() override { return std::string("LOUDNESS Sound System"); }
+  unsigned int getorders() override { return numposi; }
+  unsigned int getorder() override { return posplay; }
+  unsigned char getpattern(unsigned long order) override { return order; }
 
-  unsigned int getrow() { return pattplay; }
-  unsigned int getrows() { return pattlen; }
-  unsigned int getnchans() { return 9; }
-  unsigned int getspeed() { return speed; }
-  unsigned int getinstruments() { return numpatch; }
+  unsigned int getrow() override { return pattplay; }
+  unsigned int getrows() override { return pattlen; }
+  unsigned int getnchans() override { return 9; }
+  unsigned int getspeed() override { return speed; }
+  unsigned int getinstruments() override { return numpatch; }
   void gettrackdata(unsigned char pattern, void (*callback)(void *arg, unsigned char row, unsigned char channel, unsigned char note, TrackedCmds command, unsigned char inst, unsigned char volume, unsigned char param), void *arg) override;
 
  private:

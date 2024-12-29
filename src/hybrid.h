@@ -71,26 +71,26 @@ protected:
 		unsigned char   speed_counter;
 	} hyb;
 	//
-	bool            xadplayer_load();
-	void            xadplayer_rewind(int subsong);
-	void            xadplayer_update();
-	float           xadplayer_getrefresh();
-	std::string     xadplayer_gettype();
-	std::string     xadplayer_getinstrument(unsigned int i);
-	unsigned int    xadplayer_getinstruments();
+	bool            xadplayer_load() override;
+	void            xadplayer_rewind(int subsong) override;
+	void            xadplayer_update() override;
+	float           xadplayer_getrefresh() override;
+	std::string     xadplayer_gettype() override;
+	std::string     xadplayer_getinstrument(unsigned int i) override;
+	unsigned int    xadplayer_getinstruments() override;
 
 	// Wraithverge: added this.
-	unsigned int    xadplayer_getspeed();
+	unsigned int    xadplayer_getspeed() override;
 
-	unsigned int getpatterns() { return 256; } // need to parse data and detect the real length by review of breaks/jumps
-	unsigned int getpattern() { return hyb.order_pos; } // since channels multiplex orders to build a pattern
-	unsigned char getpattern(unsigned long order) { return order; } // since channels multiplex orders to build a pattern
-	unsigned int getorders() { return 256; } // need to parse data and detect the real length by review of breaks/jumps
-	unsigned int getorder() { return hyb.order_pos; };
-	unsigned int getrow() { return hyb.pattern_pos; };
-	unsigned int getrows() { return 0x40; }
-	unsigned int getnchans() { return 9; }
-	unsigned int getspeed() { return plr.speed; }
+	unsigned int getpatterns() override { return 256; } // need to parse data and detect the real length by review of breaks/jumps
+	unsigned int getpattern() override { return hyb.order_pos; } // since channels multiplex orders to build a pattern
+	unsigned char getpattern(unsigned long order) override { return order; } // since channels multiplex orders to build a pattern
+	unsigned int getorders() override { return 256; } // need to parse data and detect the real length by review of breaks/jumps
+	unsigned int getorder() override { return hyb.order_pos; };
+	unsigned int getrow() override { return hyb.pattern_pos; };
+	unsigned int getrows() override { return 0x40; }
+	unsigned int getnchans() override { return 9; }
+	unsigned int getspeed() override { return plr.speed; }
 	void gettrackdata(unsigned char pattern, void (*callback)(void *arg, unsigned char row, unsigned char channel, unsigned char note, TrackedCmds command, unsigned char inst, unsigned char volume, unsigned char param), void *arg) override;
 
 private:

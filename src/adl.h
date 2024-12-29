@@ -36,19 +36,19 @@ class CadlPlayer: public CPlayer
   CadlPlayer(Copl *newopl);
   ~CadlPlayer();
 
-  bool load(const std::string &filename, const CFileProvider &fp);
-  bool update();
-  void rewind(int subsong = -1);
+  bool load(const std::string &filename, const CFileProvider &fp) override;
+  bool update() override;
+  void rewind(int subsong = -1) override;
 
   // refresh rate is fixed at 72Hz
-  float getrefresh()
+  float getrefresh() override
     {
       return 72.0f;
     }
 
-  unsigned int getsubsongs();
-  unsigned int getsubsong() { return cursubsong; }
-  std::string gettype();
+  unsigned int getsubsongs() override;
+  unsigned int getsubsong() override { return cursubsong; }
+  std::string gettype() override;
 
   void playSoundEffect(uint16_t track, uint8_t volume = 0xFF);
 

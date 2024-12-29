@@ -28,16 +28,16 @@ class CdtmLoader: public CmodPlayer
 
   CdtmLoader(Copl *newopl) : CmodPlayer(newopl) { };
 
-  bool	load(const std::string &filename, const CFileProvider &fp);
-  void	rewind(int subsong);
-  float	getrefresh();
+  bool	load(const std::string &filename, const CFileProvider &fp) override;
+  void	rewind(int subsong) override;
+  float	getrefresh() override;
 
-  std::string     gettype();
-  std::string     gettitle();
-  std::string     getauthor();
-  std::string     getdesc();
-  std::string     getinstrument(unsigned int n);
-  unsigned int    getinstruments();
+  std::string     gettype() override;
+  std::string     gettitle() override;
+  std::string     getauthor() override;
+  std::string     getdesc() override;
+  std::string     getinstrument(unsigned int n) override;
+  unsigned int    getinstruments() override;
 
  private:
   enum {

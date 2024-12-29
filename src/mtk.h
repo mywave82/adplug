@@ -32,17 +32,17 @@ class CmtkLoader: public ChscPlayer
       mtkmode = 1;
     };
 
-  bool load(const std::string &filename, const CFileProvider &fp);
+  bool load(const std::string &filename, const CFileProvider &fp) override;
 
-  std::string gettype()
+  std::string gettype() override
     { return std::string("MPU-401 Trakker"); };
-  std::string gettitle()
+  std::string gettitle() override
     { return std::string(title); };
-  std::string getauthor()
+  std::string getauthor() override
     { return std::string(composer); };
-  unsigned int getinstruments()
+  unsigned int getinstruments() override
     { return 128; };
-  std::string getinstrument(unsigned int n)
+  std::string getinstrument(unsigned int n) override
     { return n < 128 ? std::string(instname[n]) : std::string(); };
 
  private:
