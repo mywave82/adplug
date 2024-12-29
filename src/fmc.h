@@ -28,13 +28,13 @@ class CfmcLoader: public CmodPlayer
 
 		CfmcLoader(Copl *newopl) : CmodPlayer(newopl) { };
 
-		bool	load(const std::string &filename, const CFileProvider &fp);
-		float	getrefresh();
+		bool	load(const std::string &filename, const CFileProvider &fp) override;
+		float	getrefresh() override;
 
-		std::string	gettype();
-		std::string	gettitle();
-		std::string	getinstrument(unsigned int n);
-		unsigned int	getinstruments();
+		std::string	gettype() override;
+		std::string	gettitle() override;
+		std::string	getinstrument(unsigned int n) override;
+		unsigned int	getinstruments() override;
 
 	private:
 

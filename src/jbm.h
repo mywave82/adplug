@@ -34,19 +34,19 @@ class CjbmPlayer: public CPlayer
   ~CjbmPlayer()
     { delete[] sequences; delete[] m; }
 
-  bool load(const std::string &filename, const CFileProvider &fp);
-  bool update();
-  void rewind(int subsong);
+  bool load(const std::string &filename, const CFileProvider &fp) override;
+  bool update() override;
+  void rewind(int subsong) override;
 
-  float getrefresh()
+  float getrefresh() override
     { return timer; }
 
-  std::string gettype()
+  std::string gettype() override
     {
       return std::string(flags&1 ? "JBM Adlib Music [rhythm mode]" :
 			 "JBM Adlib Music");
     }
-  std::string getauthor()
+  std::string getauthor() override
     { return std::string("Johannes Bjerregaard"); }
 
  protected:

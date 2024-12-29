@@ -57,21 +57,21 @@ public:
 		if (data) delete [] data;
 	};
 
-	bool load(const std::string &filename, const CFileProvider &fp);
-	bool update();
-	void frontend_rewind(int subsong);
+	bool load(const std::string &filename, const CFileProvider &fp) override;
+	bool update() override;
+	void frontend_rewind(int subsong) override;
 
-	float getrefresh()
+	float getrefresh() override
 	{
 		return 1000.0f;
 	};
 
-	std::string gettype()
+	std::string gettype() override
 	{
 		return std::string("AdLib Visual Composer: Coktel Vision");
 	}
 
-	unsigned int getinstruments()
+	unsigned int getinstruments() override
 	{
 		return insts ? nrTimbre : 0;
 	};

@@ -32,24 +32,24 @@ public:
 
 	CcmfmacsoperaPlayer(Copl* newopl);
 
-	bool load(const std::string& filename, const CFileProvider& fp);
-	bool update();
-	void rewind(int subsong);
-	float getrefresh() { return speedRowsPerSec; };
+	bool load(const std::string& filename, const CFileProvider& fp) override;
+	bool update() override;
+	void rewind(int subsong) override;
+	float getrefresh() override{ return speedRowsPerSec; };
 
-	virtual std::string gettype();
-	virtual unsigned int getpatterns()    { return nrOfPatterns; }
-	virtual unsigned int getpattern()     { return patternOrder[currentOrderIndex]; }
-	virtual unsigned int getorders()      { return nrOfOrders; }
-	virtual unsigned int getorder()       { return currentOrderIndex; }
-	virtual unsigned int getrow()         { return currentRow; }
-	virtual unsigned int getrows()        { return 65; }
-	virtual unsigned int getnchans()      { return 11;  /* not 6? */}
-	virtual unsigned int getspeed()       { return 1; }
-	virtual unsigned char getpattern(unsigned long ordr) {if (ordr >= (unsigned long)nrOfOrders) return 0; return patternOrder[ordr]; }
+	std::string gettype() override;
+	unsigned int getpatterns() override   { return nrOfPatterns; }
+	unsigned int getpattern() override    { return patternOrder[currentOrderIndex]; }
+	unsigned int getorders() override     { return nrOfOrders; }
+	unsigned int getorder() override      { return currentOrderIndex; }
+	unsigned int getrow() override        { return currentRow; }
+	unsigned int getrows() override       { return 65; }
+	unsigned int getnchans() override     { return 11;  /* not 6? */}
+	unsigned int getspeed() override      { return 1; }
+	unsigned char getpattern(unsigned long ordr) override {if (ordr >= (unsigned long)nrOfOrders) return 0; return patternOrder[ordr]; }
 	void gettrackdata(unsigned char pattern, void (*callback)(void *arg, unsigned char row, unsigned char channel, unsigned char note, TrackedCmds command, unsigned char inst, unsigned char volume, unsigned char param), void *arg) override;
-	virtual unsigned int getinstruments() { return instruments.size(); }
-	virtual std::string getinstrument(unsigned int n) { return instruments[n].name; }
+	unsigned int getinstruments() override { return instruments.size(); }
+	std::string getinstrument(unsigned int n) override { return instruments[n].name; }
 
  protected:
 	struct SlotSettings {

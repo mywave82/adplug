@@ -171,43 +171,43 @@ public:
 		if (drv) delete drv;
 	};
 
-	bool load(const std::string &filename, const CFileProvider &fp);
-	bool update();
-	void rewind(int subsong);
+	bool load(const std::string &filename, const CFileProvider &fp) override;
+	bool update() override;
+	void rewind(int subsong) override;
 
-	float getrefresh()
+	float getrefresh() override
 	{
 		return timer;
 	};
 
-	unsigned int getspeed()
+	unsigned int getspeed() override
 	{
 		return cur_tempo;
 	};
 
-	std::string gettitle()
+	std::string gettitle() override
 	{
 		return title[0] ? std::string(title) : std::string(fname);
 	}
 
-	std::string gettype()
+	std::string gettype() override
 	{
 		char type[36];
 		snprintf(type, sizeof(type), "Note Sequencer v%u.%u by sopepos", (version >> 8) & 0xFF, version & 0xFF);
 		return std::string(type);
 	}
 
-	std::string getdesc()
+	std::string getdesc() override
 	{
 		return std::string(comment);
 	}
 
-	unsigned int getinstruments()
+	unsigned int getinstruments() override
 	{
 		return inst ? nInsts : 0;
 	};
 
-	std::string getinstrument(unsigned int n)
+	std::string getinstrument(unsigned int n) override
 	{
 		return inst && n < nInsts ? std::string(inst[n].longname) : std::string();
 	};

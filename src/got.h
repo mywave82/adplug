@@ -42,21 +42,21 @@ public:
 		if(data) delete [] data;
 	};
 
-	bool load(const std::string &filename, const CFileProvider &fp);
-	bool update();
-	void rewind(int subsong);
+	bool load(const std::string &filename, const CFileProvider &fp) override;
+	bool update() override;
+	void rewind(int subsong) override;
 
-	float getrefresh()
+	float getrefresh() override
 	{
 		return timer;
 	};
 
-	std::string gettype()
+	std::string gettype() override
 	{
 		return std::string("God of Thunder Music");
 	}
 
-	unsigned int getspeed()
+	unsigned int getspeed() override
 	{
 		return (int)rate;
 	}

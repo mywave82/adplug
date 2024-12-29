@@ -31,41 +31,41 @@ class Cs3mPlayer: public CPlayer
 
   Cs3mPlayer(Copl *newopl);
 
-  bool load(const std::string &filename, const CFileProvider &fp);
-  bool update();
-  void rewind(int subsong);
-  float getrefresh();
+  bool load(const std::string &filename, const CFileProvider &fp) override;
+  bool update() override;
+  void rewind(int subsong) override;
+  float getrefresh() override;
 
-  std::string gettype();
-  std::string gettitle()
+  std::string gettype() override;
+  std::string gettitle() override
     { return std::string(header.name); };
 
-  unsigned int getpatterns()
+  unsigned int getpatterns() override
     { return header.patnum; };
-  unsigned int getpattern()
+  unsigned int getpattern() override
     { return orders[ord]; };
-  unsigned int getorders()
+  unsigned int getorders() override
     { return (header.ordnum-1); };
-  unsigned int getorder()
+  unsigned int getorder() override
     { return ord; };
-  unsigned int getrow()
+  unsigned int getrow() override
     { return crow; };
-  unsigned int getrows()
+  unsigned int getrows() override
     { return 64; }
-  unsigned int getnchans();
+  unsigned int getnchans() override;
   void gettrackdata(unsigned char pattern, void (*callback)(void *arg, unsigned char row, unsigned char channel, unsigned char note, TrackedCmds command, unsigned char inst, unsigned char volume, unsigned char param), void *arg) override;
-  unsigned int getspeed()
+  unsigned int getspeed() override
     { return speed; };
 
-  unsigned char getpattern(unsigned long ord)
+  unsigned char getpattern(unsigned long ord) override
     {
       unsigned char pattnr = ord < header.ordnum ? orders[ord] : 0xff;
       return pattnr;
     }
 
-  unsigned int getinstruments()
+  unsigned int getinstruments() override
     { return header.insnum; };
-  std::string getinstrument(unsigned int n)
+  std::string getinstrument(unsigned int n) override
     { return std::string(inst[n].name); };
 
  protected:

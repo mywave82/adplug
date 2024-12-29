@@ -79,43 +79,43 @@ public:
 		if (inst) delete[] inst;
 	};
 
-	bool load(const std::string &filename, const CFileProvider &fp);
-	bool update();
-	void rewind(int subsong);
+	bool load(const std::string &filename, const CFileProvider &fp) override;
+	bool update() override;
+	void rewind(int subsong) override;
 
-	float getrefresh()
+	float getrefresh() override
 	{
 		return (float)200.299;
 	};
 
-	unsigned int getspeed()
+	unsigned int getspeed() override
 	{
 		return wSpeed;
 	};
 
-	unsigned int getpatterns()
+	unsigned int getpatterns() override
 	{
 		return total_ticks / HERAD_MEASURE_TICKS + (total_ticks % HERAD_MEASURE_TICKS ? 1 : 0);
 	};
 
-	unsigned int getpattern()
+	unsigned int getpattern() override
 	{
 		return (ticks_pos <= 0 ? 0: (ticks_pos - 1) / HERAD_MEASURE_TICKS + 1);
 	};
 
-	unsigned int getrow()
+	unsigned int getrow() override
 	{
 		return (ticks_pos <= 0 ? 0 : (ticks_pos - 1) % HERAD_MEASURE_TICKS);
 	};
 
-	std::string gettype();
+	std::string gettype() override;
 
-	unsigned int getinstruments()
+	unsigned int getinstruments() override
 	{
 		return inst ? nInsts : 0;
 	};
 
-	std::string getinstrument(unsigned int n)
+	std::string getinstrument(unsigned int n) override
 	{
 		return std::string();
 	};

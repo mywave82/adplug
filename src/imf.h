@@ -35,18 +35,18 @@ public:
 	~CimfPlayer()
 	  { if(data) delete [] data; if(footer) delete [] footer; };
 
-	bool load(const std::string &filename, const CFileProvider &fp);
-	bool update();
-	void rewind(int subsong);
-	float getrefresh()
+	bool load(const std::string &filename, const CFileProvider &fp) override;
+	bool update() override;
+	void rewind(int subsong) override;
+	float getrefresh() override
 	  { return timer; };
 
-	std::string gettype()
+	std::string gettype() override
 	  { return std::string("IMF File Format"); }
-	std::string gettitle();
-	std::string getauthor()
+	std::string gettitle() override;
+	std::string getauthor() override
 	  { return author_name; }
-	std::string getdesc();
+	std::string getdesc() override;
 
 protected:
 	unsigned long	pos, size;

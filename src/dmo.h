@@ -30,10 +30,10 @@ class CdmoLoader: public Cs3mPlayer
 
   CdmoLoader(Copl *newopl) : Cs3mPlayer(newopl) { };
 
-  bool	load(const std::string &filename, const CFileProvider &fp);
+  bool	load(const std::string &filename, const CFileProvider &fp) override;
 
-  std::string	gettype();
-  std::string	getauthor();
+  std::string	gettype() override;
+  std::string	getauthor() override;
 
  private:
 
