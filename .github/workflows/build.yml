@@ -67,8 +67,6 @@ jobs:
 
         if [[ ${{ matrix.compiler }} = powerpc-gcc ]]; then
           sudo apt install -y g++-powerpc-linux-gnu gcc-powerpc-linux-gnu qemu-user
-          sudo mkdir /usr/local/powerpc
-          sudo chown $USER /usr/local/powerpc
         fi
 
     - name: Install packages (macOS)
@@ -94,7 +92,7 @@ jobs:
     - name: Set GCC environment (Linux)
       if: ${{ matrix.compiler == 'gcc' && runner.os == 'Linux'}}
       run: |
-        echo 'adplug_env=CFLAGS="-O2 -pipe -fsanitize=address -fsanitize=leak" CXXFLAGS="-O2 -pipe -fsanitize=address -fsanitize=leak" CPPFLAGS="-fsanitize=address -fsanitize=leak" LDFLAGS="-Wl,-O1 -Wl,--as-needed -Wl,--no-undefined -Wl,--gc-sections"' >> $GITHUB_ENV
+        echo 'adplug_env=CFLAGS="-O2 -pipe -fsanitize=address -fsanitize=leak" CXXFLAGS="-O2 -pipe -fsanitize=address -fsanitize=leak" CPPFLAGS="-fsanitize=address -fsanitize=leak" LDFLAGS="-Wl,-O1 -Wl,--as-needed -Wl,--gc-sections"' >> $GITHUB_ENV
 
     - name: Set GCC-4.8 environment (Linux)
       if: ${{ matrix.compiler == 'gcc-4.8' }}
@@ -154,7 +152,7 @@ jobs:
           # -j1 is there to fix race conditions when building checks and then running dosemu
           make -j1 check
         elif  [[ ${{ matrix.compiler }} == "powerpc-gcc" ]]; then
-          make all install test/crctest test/emutest test/playtest test/strstest
+          make all test/crctest test/emutest test/playtest test/strstest && sudo env PATH=$PATH make install
           sed -e 's/exec "/exec qemu-ppc -L /usr/local/powerpc -L /usr/powerpc-linux-gnu "/' -i test/crctest test/emutest test/playtest test/strstest
         elif [[ ${{ runner.os }} == "Linux" ]]; then
           # distcheck needs env.compile.env and ${{ env.adplug_env }}, since it invokes ./configure
