@@ -87,9 +87,14 @@ jobs:
     #   with:
     #     version: "10.0"
 
+# adplug_env    is for `adplug`                configure and make distcheck
+# compiler_env  is for `libbinio` and `adplug` configure and make distcheck
+# compiler_opts is for `libbinio` and `adplug` configure
+
     - name: Set GCC environment (Linux)
       if: ${{ matrix.compiler == 'gcc' && runner.os == 'Linux'}}
-      run: echo 'compile_env=CFLAGS="-O2 -pipe -fsanitize=address -fsanitize=leak" CXXFLAGS="-O2 -pipe -fsanitize=address -fsanitize=leak" CPPFLAGS="-fsanitize=address -fsanitize=leak" LDFLAGS="-Wl,-O1 -Wl,--as-needed -Wl,--no-undefined -Wl,--gc-sections"' >> $GITHUB_ENV
+      run: |
+        echo 'adplug_env=CFLAGS="-O2 -pipe -fsanitize=address -fsanitize=leak" CXXFLAGS="-O2 -pipe -fsanitize=address -fsanitize=leak" CPPFLAGS="-fsanitize=address -fsanitize=leak" LDFLAGS="-Wl,-O1 -Wl,--as-needed -Wl,--no-undefined -Wl,--gc-sections"' >> $GITHUB_ENV
 
     - name: Set GCC-4.8 environment (Linux)
       if: ${{ matrix.compiler == 'gcc-4.8' }}
@@ -107,7 +112,7 @@ jobs:
       if: ${{ startsWith(matrix.compiler, 'djgpp') }}
       run: |
         echo 'compile_opts=--host=i586-pc-msdosdjgpp --prefix=/usr/local/djgpp' >> $GITHUB_ENV 
-        echo 'compile_env=CFLAGS="-O2 -pipe" CXXFLAGS="-O2 -pipe -Wno-deprecated" CPPFLAGS="-O2 -pipe -Wno-deprecated" LDFLAGS="-Wl,-O1 -Wl,--as-needed -Wl,--no-undefined -Wl,--gc-sections" PKG_CONFIG_PATH=/usr/local/djgpp/lib/pkgconfig' >> $GITHUB_ENV
+        echo 'adplug_env=CFLAGS="-O2 -pipe" CXXFLAGS="-O2 -pipe -Wno-deprecated" CPPFLAGS="-O2 -pipe -Wno-deprecated" LDFLAGS="-Wl,-O1 -Wl,--as-needed -Wl,--no-undefined -Wl,--gc-sections" PKG_CONFIG_PATH=/usr/local/djgpp/lib/pkgconfig' >> $GITHUB_ENV
         echo '/usr/local/djgpp/bin/' >> $GITHUB_PATH
 
     - name: Set PowerPC-GCC environment
@@ -125,7 +130,7 @@ jobs:
     - name: autoreconf
       run: autoreconf -i
     - name: configure
-      run: ./configure ${{ env.compile_opts }} ${{ env.compile.env }} || cat config.log
+      run: ./configure ${{ env.compile_opts }} ${{ env.compile.env }} ${{ env.adplug_env }} || cat config.log
 
     - name: make
       run: |
@@ -152,8 +157,8 @@ jobs:
           make all install test/crctest test/emutest test/playtest test/strstest
           sed -e 's/exec "/exec qemu-ppc -L /usr/local/powerpc -L /usr/powerpc-linux-gnu "/' -i test/crctest test/emutest test/playtest test/strstest
         elif [[ ${{ runner.os }} == "Linux" ]]; then
-          # distcheck needs env.compile.env, since it invokes ./configure
-          make distcheck ${{ env.compile.env }}
+          # distcheck needs env.compile.env and ${{ env.adplug_env }}, since it invokes ./configure
+          make distcheck ${{ env.compile.env }} ${{ env.adplug_env }}
         fi
 
     - name: Prepare test results (Linux)
