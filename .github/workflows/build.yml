@@ -108,13 +108,13 @@ jobs:
         echo '/usr/local/djgpp/bin/' >> $GITHUB_PATH
 
     - name: Set PowerPC-GCC environment
-      if: ${{  matrix.compiler == 'powerpc-gcc' }}
+      if: ${{ matrix.compiler == 'powerpc-gcc' }}
       run: |
         echo 'compile_opts=--host=powerpc-linux-gnu --prefix=/usr/local/powerpc PKG_CONFIG_PATH=/usr/local/powerpc/lib/pkgconfig' >> $GITHUB_ENV
-	echo $GITHUB_WORKSPACE
+        echo $GITHUB_WORKSPACE
         pwd
         ls
-	ls $GITHUB_WORKSPACE
+        ls $GITHUB_WORKSPACE
         echo -e '#! /bin/sh\\nexec qemu-ppc -L /tmp/powerpc -L /usr/powerpc-linux-gnu "$@"' > adplug/qemu-wrapper.sh
 
     - name: Install libbinio
