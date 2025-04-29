@@ -89,42 +89,43 @@ jobs:
 
     - name: Set GCC environment (Linux)
       if: ${{ matrix.compiler == 'gcc' && runner.os == 'Linux'}}
-      run: echo 'compile_opts=CFLAGS="-O2 -pipe -fsanitize=address -fsanitize=leak" CXXFLAGS="-O2 -pipe -fsanitize=address -fsanitize=leak" CPPFLAGS="-fsanitize=address -fsanitize=leak" LDFLAGS="-Wl,-O1 -Wl,--as-needed -Wl,--no-undefined -Wl,--gc-sections"' >> $GITHUB_ENV
+      run: echo 'compile_env=CFLAGS="-O2 -pipe -fsanitize=address -fsanitize=leak" CXXFLAGS="-O2 -pipe -fsanitize=address -fsanitize=leak" CPPFLAGS="-fsanitize=address -fsanitize=leak" LDFLAGS="-Wl,-O1 -Wl,--as-needed -Wl,--no-undefined -Wl,--gc-sections"' >> $GITHUB_ENV
 
     - name: Set GCC-4.8 environment (Linux)
       if: ${{ matrix.compiler == 'gcc-4.8' }}
-      run: echo 'compile_opts=CC=gcc-4.8 CXX=g++-4.8' >> $GITHUB_ENV
+      run: echo 'compile_env=CC=gcc-4.8 CXX=g++-4.8' >> $GITHUB_ENV
 
     - name: Set GCC environment (macOS)
       if: ${{ matrix.compiler == 'gcc' && runner.os == 'macOS' }}
-      run: echo 'compile_opts=CC=gcc CXX=g++' >> $GITHUB_ENV
+      run: echo 'compile_env=CC=gcc CXX=g++' >> $GITHUB_ENV
 
     - name: Set Clang environment
       if: ${{ matrix.compiler == 'clang' }}
-      run: echo 'compile_opts=CC=clang CXX=clang++' >> $GITHUB_ENV
+      run: echo 'compile_env=CC=clang CXX=clang++' >> $GITHUB_ENV
 
     - name: Set DJGPP environment
       if: ${{ startsWith(matrix.compiler, 'djgpp') }}
       run: |
-        echo 'compile_opts=--host=i586-pc-msdosdjgpp --prefix=/usr/local/djgpp CFLAGS="-O2 -pipe" CXXFLAGS="-O2 -pipe -Wno-deprecated" CPPFLAGS="-O2 -pipe -Wno-deprecated" LDFLAGS="-Wl,-O1 -Wl,--as-needed -Wl,--no-undefined -Wl,--gc-sections" PKG_CONFIG_PATH=/usr/local/djgpp/lib/pkgconfig' >> $GITHUB_ENV
+        echo 'compile_opts=--host=i586-pc-msdosdjgpp --prefix=/usr/local/djgpp' >> $GITHUB_ENV 
+        echo 'compile_env=CFLAGS="-O2 -pipe" CXXFLAGS="-O2 -pipe -Wno-deprecated" CPPFLAGS="-O2 -pipe -Wno-deprecated" LDFLAGS="-Wl,-O1 -Wl,--as-needed -Wl,--no-undefined -Wl,--gc-sections" PKG_CONFIG_PATH=/usr/local/djgpp/lib/pkgconfig' >> $GITHUB_ENV
         echo '/usr/local/djgpp/bin/' >> $GITHUB_PATH
 
     - name: Set PowerPC-GCC environment
       if: ${{ matrix.compiler == 'powerpc-gcc' }}
       run: |
-        echo 'compile_opts=--host=powerpc-linux-gnu --prefix=/usr/local/powerpc PKG_CONFIG_PATH=/usr/local/powerpc/lib/pkgconfig MAKE="make stresstest_wrapper=./qemu-wrapper.sh"'>> $GITHUB_ENV
+        echo 'compile_opts=--host=powerpc-linux-gnu --prefix=/usr/local/powerpc'>> $GITHUB_ENV
+        echo 'compile_env=PKG_CONFIG_PATH=/usr/local/powerpc/lib/pkgconfig MAKE="make stresstest_wrapper=./qemu-wrapper.sh"'>> $GITHUB_ENV
         echo -e '#!/bin/sh\nexec qemu-ppc -L /usr/local/powerpc -L /usr/powerpc-linux-gnu "$@"' > qemu-wrapper.sh
-        cat qemu-wrapper.sh
 
     - name: Install libbinio
       run: |
         git clone http://github.com/adplug/libbinio.git
-        pushd libbinio && autoreconf -i && ./configure --enable-maintainer-mode ${{ env.compile_opts }} && make && sudo env PATH=$PATH make install && popd
+        pushd libbinio && autoreconf -i && ./configure --enable-maintainer-mode ${{ env.compile_opts }} ${{ env.compile_env }} && make && sudo env PATH=$PATH make install && popd
 
     - name: autoreconf
       run: autoreconf -i
     - name: configure
-      run: ./configure ${{ env.compile_opts }} || cat config.log
+      run: ./configure ${{ env.compile_opts }} ${{ env.compile.env }} || cat config.log
 
     - name: make
       run: |
@@ -145,16 +146,14 @@ jobs:
           # Setup dosemu as testing tool
           export LOG_COMPILER="dosemu"
           export AM_LOG_FLAGS="-dumb $f"
-          # Note: compile_opts is not used here, since DJGPP requires stuff like --host for ./configure
-          # which will mess with make's command-line parsing
           # -j1 is there to fix race conditions when building checks and then running dosemu
           make -j1 check
         elif  [[ ${{ matrix.compiler }} == "powerpc-gcc" ]]; then
           make all install test/crctest test/emutest test/playtest test/strstest
           sed -e 's/exec "/exec qemu-ppc -L /usr/local/powerpc -L /usr/powerpc-linux-gnu "/' -i test/crctest test/emutest test/playtest test/strstest
-          make distcheck
         elif [[ ${{ runner.os }} == "Linux" ]]; then
-          make distcheck V=1
+          # distcheck needs env.compile.env, since it invokes ./configure
+          make distcheck ${{ env.compile.env }}
         fi
 
     - name: Prepare test results (Linux)
