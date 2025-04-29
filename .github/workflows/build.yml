@@ -155,8 +155,8 @@ jobs:
           make all test/crctest test/emutest test/playtest test/strstest && sudo env PATH=$PATH make install
           sed -e 's/exec "/exec qemu-ppc -L /usr/local/powerpc -L /usr/powerpc-linux-gnu "/' -i test/crctest test/emutest test/playtest test/strstest
         elif [[ ${{ runner.os }} == "Linux" ]]; then
-          # distcheck needs env.compile.env and ${{ env.adplug_env }}, since it invokes ./configure
-          make distcheck ${{ env.compile.env }} ${{ env.adplug_env }}
+          # distcheck needs env.compile_env and ${{ env.adplug_env }}, since it invokes ./configure
+          make distcheck ${{ env.compile_env }} ${{ env.adplug_env }}
         fi
 
     - name: Prepare test results (Linux)
