@@ -130,7 +130,7 @@ jobs:
     - name: autoreconf
       run: autoreconf -i
     - name: configure
-      run: ./configure ${{ env.compile_opts }} ${{ env.compile.env }} ${{ env.adplug_env }} || cat config.log
+      run: ./configure ${{ env.compile_opts }} ${{ env.compile_env }} ${{ env.adplug_env }} || cat config.log
 
     - name: make
       run: |
