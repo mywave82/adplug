@@ -17,6 +17,8 @@ jobs:
             os: ubuntu-latest
           - compiler: djgpp-2.0.5-gcc-12.2.0 # To test compatibility for Adplay - DOS
             os: ubuntu-latest
+          - compiler: powerpc-gcc # To test compatibility with big-endian powerpc
+            os: ubuntu-latest
 
       fail-fast: false
 
@@ -63,6 +65,10 @@ jobs:
           fi
         fi
 
+        if [[ ${{ matrix.compiler }} = powerpc-gcc ]]; then
+          sudo apt install -y g++-powerpc-linux-gnu g++-powerpc-linux-g++ qemu-user
+        fi
+
     - name: Install packages (macOS)
       if: ${{ runner.os == 'macOS' }}
       run: |
@@ -100,6 +106,16 @@ jobs:
       run: |
         echo 'compile_opts=--host=i586-pc-msdosdjgpp --prefix=/usr/local/djgpp CXXFLAGS=-Wno-deprecated CPPFLAGS=-Wno-deprecated PKG_CONFIG_PATH=/usr/local/djgpp/lib/pkgconfig' >> $GITHUB_ENV
         echo '/usr/local/djgpp/bin/' >> $GITHUB_PATH
+
+    - name: Set PowerPC-GCC environment
+      if: ${{  matrix.compiler == 'powerpc-gcc' }}
+      run: |
+        echo 'compile_opts=--host=powerpc-linux-gnu --prefix=/usr/local/powerpc PKG_CONFIG_PATH=/usr/local/powerpc/lib/pkgconfig' >> $GITHUB_ENV
+	echo $GITHUB_WORKSPACE
+        pwd
+        ls
+	ls $GITHUB_WORKSPACE
+        echo -e "#! /bin/sh\nexec qemu-ppc -L /tmp/powerpc -L /usr/powerpc-linux-gnu \"$@\"" > adplug/qemu-wrapper.sh
 
     - name: Install libbinio
       run: |
