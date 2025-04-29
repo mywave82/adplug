@@ -115,7 +115,7 @@ jobs:
         pwd
         ls
 	ls $GITHUB_WORKSPACE
-        echo -e "#! /bin/sh\nexec qemu-ppc -L /tmp/powerpc -L /usr/powerpc-linux-gnu \"$@\"" > adplug/qemu-wrapper.sh
+        echo -e '#! /bin/sh\\nexec qemu-ppc -L /tmp/powerpc -L /usr/powerpc-linux-gnu "$@"' > adplug/qemu-wrapper.sh
 
     - name: Install libbinio
       run: |
