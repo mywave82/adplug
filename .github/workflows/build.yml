@@ -110,7 +110,7 @@ jobs:
     - name: Set PowerPC-GCC environment
       if: ${{ matrix.compiler == 'powerpc-gcc' }}
       run: |
-        echo 'compile_opts=--host=powerpc-linux-gnu --prefix=/usr/local/powerpc PKG_CONFIG_PATH=/usr/local/powerpc/lib/pkgconfig  stresstest_wrapper=./qemu-wrapper.sh' >> $GITHUB_ENV
+        echo 'compile_opts=--host=powerpc-linux-gnu --prefix=/usr/local/powerpc PKG_CONFIG_PATH=/usr/local/powerpc/lib/pkgconfig MAKE="make stresstest_wrapper=./qemu-wrapper.sh"'>> $GITHUB_ENV
         echo -e '#!/bin/sh\nexec qemu-ppc -L /usr/local/powerpc -L /usr/powerpc-linux-gnu "$@"' > qemu-wrapper.sh
         cat qemu-wrapper.sh
 
@@ -132,7 +132,7 @@ jobs:
           # - Furthermore, trying to get a working
           #   TeX installation on macOS is a futile
           #   endeavour, hence just run tests.
-          make check ${{ env.compile_opts }}
+          make check
         elif [[ ${{ matrix.compiler }} = djgpp* ]]; then
           # Setup dosemu as testing tool
           export LOG_COMPILER="dosemu"
@@ -142,12 +142,11 @@ jobs:
           # -j1 is there to fix race conditions when building checks and then running dosemu
           make -j1 check
         elif  [[ ${{ matrix.compiler }} == "powerpc-gcc" ]]; then
-          make all install test/crctest test/emutest test/playtest test/strstest ${{ env.compile_opts }}
+          make all install test/crctest test/emutest test/playtest test/strstest
           sed -e 's/exec "/exec qemu-ppc -L /usr/local/powerpc -L /usr/powerpc-linux-gnu "/' -i test/crctest test/emutest test/playtest test/strstest
-          echo distcheck ${{ env.compile_opts }}
-          make distcheck ${{ env.compile_opts }}
+          make distcheck
         elif [[ ${{ runner.os }} == "Linux" ]]; then
-          make distcheck ${{ env.compile_opts }}
+          make distcheck
         fi
 
     - name: Prepare test results (Linux)
