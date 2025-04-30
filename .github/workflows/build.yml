@@ -135,7 +135,7 @@ jobs:
       if: ${{ matrix.compiler == 'powerpc64-gcc' }}
       run: |
         echo 'compile_opts=--host=powerpc64-linux-gnu --prefix=/usr/local/powerpc64'>> $GITHUB_ENV
-        echo 'compile_env=PKG_CONFIG_PATH=/usr/local/powerpc64/lib/pkgconfig >> $GITHUB_ENV
+        echo 'compile_env=PKG_CONFIG_PATH=/usr/local/powerpc64/lib/pkgconfig' >> $GITHUB_ENV
         #echo -e '#!/bin/sh\nexec qemu-ppc -L /usr/local/powerpc64 -L /usr/powerpc64-linux-gnu "$@"' > qemu-wrapper.sh
 
     - name: Set PowerPC-GCC environment
@@ -169,7 +169,7 @@ jobs:
           export LOG_COMPILER="dosemu"
           export AM_LOG_FLAGS="-dumb $f"
           # -j1 is there to fix race conditions when building checks and then running dosemu
-          make -j1 distcheck
+          make -j1 distcheck ${{ env.compile_env }} ${{ env.adplug_env }}
         elif  [[ ${{ matrix.compiler }} == "powerpc-gcc" ]]; then
           make all test/crctest test/emutest test/playtest test/strstest && sudo env PATH=$PATH make install
           sed -e 's/exec "/exec qemu-ppc -L \/usr\/local\/powerpc -L \/usr\/powerpc-linux-gnu "/' -i test/crctest test/emutest test/playtest test/strstest
@@ -193,6 +193,8 @@ jobs:
           export AM_LOG_FLAGS="-dumb $f"
         fi
         # -j1 is there to fix race conditions when building checks and then running dosemu
+	cat Makefile|grep '^MAKE '
+	cat qemu-wrapper.sh
         make -j1 check
 
     - name: Show test results
