@@ -148,7 +148,7 @@ jobs:
     - name: Install libbinio
       run: |
         git clone http://github.com/adplug/libbinio.git
-        pushd libbinio && autoreconf -i && ./configure --enable-maintainer-mode ${{ env.compile_opts }} ${{ env.compile_env }} && make && sudo env PATH=$PATH make install && popd
+        pushd libbinio && autoreconf -i && ./configure --enable-maintainer-mode ${{ env.compile_opts }} ${{ env.compile_env }} && make ${{ env.compile_env }} && sudo env PATH=$PATH make install && popd
 
     - name: autoreconf
       run: autoreconf -i
@@ -165,18 +165,23 @@ jobs:
           #   endeavour, hence just run `all` instead `distcheck`
           make all ${{ env.compile_env }} ${{ env.adplug_env }} && sudo env PATH=$PATH make install
         else
-          make distcheck ${{ env.compile_env }} ${{ env.adplug_env }} && sudo env PATH=$PATH make install
+          #make distcheck ${{ env.compile_env }} ${{ env.adplug_env }} && sudo env PATH=$PATH make install
+          make all ${{ env.compile_env }} ${{ env.adplug_env }} && sudo env PATH=$PATH make install
         fi
 
         if [[ ${{ matrix.compiler }} = djgpp* ]]; then
+          make test/crctest test/emutest test/playtest test/strstest ${{ env.compile_env }} ${{ env.adplug_env }}
           sed -e 's/exec "/exec dosemu -dumb $f "/' -i test/crctest test/emutest test/playtest test/strstest
         elif  [[ ${{ matrix.compiler }} == "powerpc-gcc" ]]; then
+          make test/crctest test/emutest test/playtest test/strstest ${{ env.compile_env }} ${{ env.adplug_env }}
           #make all test/crctest test/emutest test/playtest test/strstest ${{ env.compile_env }} ${{ env.adplug_env }} && sudo env PATH=$PATH make install
           sed -e 's/exec "/exec qemu-ppc -L \/usr\/local\/powerpc -L \/usr\/powerpc-linux-gnu "/' -i test/crctest test/emutest test/playtest test/strstest
         elif  [[ ${{ matrix.compiler }} == "powerpc64-gcc" ]]; then
           #make all test/crctest test/emutest test/playtest test/strstest ${{ env.compile_env }} ${{ env.adplug_env }} && sudo env PATH=$PATH make install
+          make test/crctest test/emutest test/playtest test/strstest ${{ env.compile_env }} ${{ env.adplug_env }}
           sed -e 's/exec "/exec qemu-ppc -L \/usr\/local\/powerpc64 -L \/usr\/powerpc64-linux-gnu "/' -i test/crctest test/emutest test/playtest test/strstest
         elif  [[ ${{ matrix.compiler }} == "powerpc64le-gcc" ]]; then
+          make test/crctest test/emutest test/playtest test/strstest ${{ env.compile_env }} ${{ env.adplug_env }}
           #make all test/crctest test/emutest test/playtest test/strstest ${{ env.compile_env }} ${{ env.adplug_env }} && sudo env PATH=$PATH make install
           sed -e 's/exec "/exec qemu-ppc -L \/usr\/local\/powerpc64le -L \/usr\/powerpc64le-linux-gnu "/' -i test/crctest test/emutest test/playtest test/strstest
         fi
