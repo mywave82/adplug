@@ -168,7 +168,9 @@ jobs:
           make distcheck ${{ env.compile_env }} ${{ env.adplug_env }} && sudo env PATH=$PATH make install
         fi
 
-        if  [[ ${{ matrix.compiler }} == "powerpc-gcc" ]]; then
+        if [[ ${{ matrix.compiler }} = djgpp* ]]; then
+          sed -e 's/exec "/exec dosemu -dumb $f "/' -i test/crctest test/emutest test/playtest test/strstest
+        elif  [[ ${{ matrix.compiler }} == "powerpc-gcc" ]]; then
           #make all test/crctest test/emutest test/playtest test/strstest ${{ env.compile_env }} ${{ env.adplug_env }} && sudo env PATH=$PATH make install
           sed -e 's/exec "/exec qemu-ppc -L \/usr\/local\/powerpc -L \/usr\/powerpc-linux-gnu "/' -i test/crctest test/emutest test/playtest test/strstest
         elif  [[ ${{ matrix.compiler }} == "powerpc64-gcc" ]]; then
@@ -180,13 +182,13 @@ jobs:
         fi
 
     - name: Prepare test results
-      if: ${{ (runner.os == 'Linux' || runner.os == 'macOS') (matrix.compiler != 'powerpc64-gcc') }}
+      if: ${{ (runner.os == 'Linux' || runner.os == 'macOS') && (matrix.compiler != 'powerpc64-gcc') }}
       run: |
-        if [[ ${{ matrix.compiler }} = djgpp* ]]; then
-          # Setup dosemu as testing tool
-          export LOG_COMPILER="dosemu"
-          export AM_LOG_FLAGS="-dumb $f"
-        fi
+        #if [[ ${{ matrix.compiler }} = djgpp* ]]; then
+        #  # Setup dosemu as testing tool
+        #  export LOG_COMPILER="dosemu"
+        #  export AM_LOG_FLAGS="-dumb $f"
+        #fi
         # -j1 is there to fix race conditions when building checks and then running dosemu
         make -j1 check ${{ env.compile_env }} ${{ env.adplug_env }}
 
