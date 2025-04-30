@@ -201,7 +201,7 @@ jobs:
         echo ca
         echo \^
         echo data
-        cat Makefile | grep '^MAKE '
+        cat Makefile | grep MAKE
         echo betweem cat
         cat qemu-wrapper.sh
         echo before comment
