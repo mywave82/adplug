@@ -19,6 +19,10 @@ jobs:
             os: ubuntu-latest
           - compiler: powerpc-gcc # To test compatibility with big-endian powerpc
             os: ubuntu-latest
+          - compiler: powerpc64-gcc # To test compatibility with big-endian powerpc
+            os: ubuntu-latest
+          - compiler: powerpcle64-gcc # To test compatibility with little-endian powerpc
+            os: ubuntu-latest
 
       fail-fast: false
 
@@ -67,6 +71,12 @@ jobs:
 
         if [[ ${{ matrix.compiler }} = powerpc-gcc ]]; then
           sudo apt install -y g++-powerpc-linux-gnu gcc-powerpc-linux-gnu qemu-user
+        fi
+        if [[ ${{ matrix.compiler }} = powerpc64-gcc ]]; then
+          sudo apt install -y g++-powerpc64-linux-gnu gcc-powerpc64-linux-gnu qemu-user
+        fi
+        if [[ ${{ matrix.compiler }} = powerpc-gcc ]]; then
+          sudo apt install -y g++-powerpc64le-linux-gnu gcc-powerpc64le-linux-gnu qemu-user
         fi
 
     - name: Install packages (macOS)
@@ -120,6 +130,20 @@ jobs:
         echo 'compile_env=PKG_CONFIG_PATH=/usr/local/powerpc/lib/pkgconfig MAKE="make stresstest_wrapper=./qemu-wrapper.sh"'>> $GITHUB_ENV
         echo -e '#!/bin/sh\nexec qemu-ppc -L /usr/local/powerpc -L /usr/powerpc-linux-gnu "$@"' > qemu-wrapper.sh
 
+    - name: Set PowerPC64-GCC environment
+      if: ${{ matrix.compiler == 'powerpc64-gcc' }}
+      run: |
+        echo 'compile_opts=--host=powerpc64-linux-gnu --prefix=/usr/local/powerpc64'>> $GITHUB_ENV
+        echo 'compile_env=PKG_CONFIG_PATH=/usr/local/powerpc64/lib/pkgconfig MAKE="make stresstest_wrapper=./qemu-wrapper.sh"'>> $GITHUB_ENV
+        echo -e '#!/bin/sh\nexec qemu-ppc -L /usr/local/powerpc64 -L /usr/powerpc64-linux-gnu "$@"' > qemu-wrapper.sh
+
+    - name: Set PowerPC-GCC environment
+      if: ${{ matrix.compiler == 'powerpc64le-gcc' }}
+      run: |
+        echo 'compile_opts=--host=powerpc64le-linux-gnu --prefix=/usr/local/powerpc64le'>> $GITHUB_ENV
+        echo 'compile_env=PKG_CONFIG_PATH=/usr/local/powerpc64le/lib/pkgconfig MAKE="make stresstest_wrapper=./qemu-wrapper.sh"'>> $GITHUB_ENV
+        echo -e '#!/bin/sh\nexec qemu-ppc -L /usr/local/powerpc64le -L /usr/powerpc64le-linux-gnu "$@"' > qemu-wrapper.sh
+
     - name: Install libbinio
       run: |
         git clone http://github.com/adplug/libbinio.git
@@ -153,7 +177,13 @@ jobs:
           make -j1 check
         elif  [[ ${{ matrix.compiler }} == "powerpc-gcc" ]]; then
           make all test/crctest test/emutest test/playtest test/strstest && sudo env PATH=$PATH make install
-          sed -e 's/exec "/exec qemu-ppc -L /usr/local/powerpc -L /usr/powerpc-linux-gnu "/' -i test/crctest test/emutest test/playtest test/strstest
+          sed -e 's/exec "/exec qemu-ppc -L \/usr\/local\/powerpc -L \/usr\/powerpc-linux-gnu "/' -i test/crctest test/emutest test/playtest test/strstest
+        elif  [[ ${{ matrix.compiler }} == "powerpc64-gcc" ]]; then
+          make all test/crctest test/emutest test/playtest test/strstest && sudo env PATH=$PATH make install
+          sed -e 's/exec "/exec qemu-ppc -L \/usr\/local\/powerpc64 -L \/usr\/powerpc64-linux-gnu "/' -i test/crctest test/emutest test/playtest test/strstest
+        elif  [[ ${{ matrix.compiler }} == "powerpc64le-gcc" ]]; then
+          make all test/crctest test/emutest test/playtest test/strstest && sudo env PATH=$PATH make install
+          sed -e 's/exec "/exec qemu-ppc -L \/usr\/local\/powerpc64le -L \/usr\/powerpc64le-linux-gnu "/' -i test/crctest test/emutest test/playtest test/strstest
         elif [[ ${{ runner.os }} == "Linux" ]]; then
           # distcheck needs env.compile_env and ${{ env.adplug_env }}, since it invokes ./configure
           make distcheck ${{ env.compile_env }} ${{ env.adplug_env }}
