@@ -73,7 +73,8 @@ jobs:
           sudo apt install -y g++-powerpc-linux-gnu gcc-powerpc-linux-gnu qemu-user
         fi
         if [[ ${{ matrix.compiler }} = powerpc64-gcc ]]; then
-          sudo apt install -y g++-powerpc64-linux-gnu gcc-powerpc64-linux-gnu qemu-user
+          # qemu does not support powerpc64
+          sudo apt install -y g++-powerpc64-linux-gnu gcc-powerpc64-linux-gnu
         fi
         if [[ ${{ matrix.compiler }} = powerpc-gcc ]]; then
           sudo apt install -y g++-powerpc64le-linux-gnu gcc-powerpc64le-linux-gnu qemu-user
@@ -134,8 +135,8 @@ jobs:
       if: ${{ matrix.compiler == 'powerpc64-gcc' }}
       run: |
         echo 'compile_opts=--host=powerpc64-linux-gnu --prefix=/usr/local/powerpc64'>> $GITHUB_ENV
-        echo 'compile_env=PKG_CONFIG_PATH=/usr/local/powerpc64/lib/pkgconfig MAKE="make stresstest_wrapper=./qemu-wrapper.sh"'>> $GITHUB_ENV
-        echo -e '#!/bin/sh\nexec qemu-ppc -L /usr/local/powerpc64 -L /usr/powerpc64-linux-gnu "$@"' > qemu-wrapper.sh
+        echo 'compile_env=PKG_CONFIG_PATH=/usr/local/powerpc64/lib/pkgconfig >> $GITHUB_ENV
+        #echo -e '#!/bin/sh\nexec qemu-ppc -L /usr/local/powerpc64 -L /usr/powerpc64-linux-gnu "$@"' > qemu-wrapper.sh
 
     - name: Set PowerPC-GCC environment
       if: ${{ matrix.compiler == 'powerpc64le-gcc' }}
@@ -156,25 +157,19 @@ jobs:
 
     - name: make
       run: |
-        cat Makefile|grep "^CPPFLAGS "
-        cat Makefile|grep "^CFLAGS "
-        cat Makefile|grep "^CXXFLAGS "
-        cat Makefile|grep "^LDFLAGS "
-        cat Makefile|grep "^CC "
-        cat Makefile|grep "^CXX "
         ulimit -c unlimited -S
         if [[ ${{ runner.os }} == "macOS" ]]; then
           # - macOS's /usr/bin/texi2dvi is broken
           # - Furthermore, trying to get a working
           #   TeX installation on macOS is a futile
-          #   endeavour, hence just run tests.
-          make check
+          #   endeavour, hence just run `all` instead `distcheck`
+          make all
         elif [[ ${{ matrix.compiler }} = djgpp* ]]; then
           # Setup dosemu as testing tool
           export LOG_COMPILER="dosemu"
           export AM_LOG_FLAGS="-dumb $f"
           # -j1 is there to fix race conditions when building checks and then running dosemu
-          make -j1 check
+          make -j1 distcheck
         elif  [[ ${{ matrix.compiler }} == "powerpc-gcc" ]]; then
           make all test/crctest test/emutest test/playtest test/strstest && sudo env PATH=$PATH make install
           sed -e 's/exec "/exec qemu-ppc -L \/usr\/local\/powerpc -L \/usr\/powerpc-linux-gnu "/' -i test/crctest test/emutest test/playtest test/strstest
@@ -189,9 +184,16 @@ jobs:
           make distcheck ${{ env.compile_env }} ${{ env.adplug_env }}
         fi
 
-    - name: Prepare test results (Linux)
-      if: ${{ runner.os == 'Linux' && !startsWith(matrix.compiler, 'djgpp')}}
-      run: make check
+    - name: Prepare test results
+      if: ${{ (runner.os == 'Linux' || runner.os == 'macOS') && !startsWith(matrix.compiler, 'djgpp') && (matrix.compiler != "powerpc64-gcc") }}
+      run: |
+        if [[ ${{ matrix.compiler }} = djgpp* ]]; then
+          # Setup dosemu as testing tool
+          export LOG_COMPILER="dosemu"
+          export AM_LOG_FLAGS="-dumb $f"
+        fi
+        # -j1 is there to fix race conditions when building checks and then running dosemu
+        make -j1 check
 
     - name: Show test results
       run: |-
