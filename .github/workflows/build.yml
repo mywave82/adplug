@@ -195,10 +195,17 @@ jobs:
           export AM_LOG_FLAGS="-dumb $f"
         fi
         echo after if
-        # -j1 is there to fix race conditions when building checks and then running dosemu
+        echo ^^
+        echo ba
+        echo ^
+        echo ca
+        echo \^
+        echo data
         cat Makefile | grep '^MAKE '
         echo betweem cat
         cat qemu-wrapper.sh
+        echo before comment
+        # -j1 is there to fix race conditions when building checks and then running dosemu
         echo before make
         make -j1 check
 
