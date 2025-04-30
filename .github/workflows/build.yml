@@ -185,7 +185,7 @@ jobs:
         fi
 
     - name: Prepare test results
-      if: ${{ (runner.os == 'Linux' || runner.os == 'macOS') && !startsWith(matrix.compiler, 'djgpp') && (matrix.compiler != "powerpc64-gcc") }}
+      if: ${{ (runner.os == 'Linux' || runner.os == 'macOS') && !startsWith(matrix.compiler, 'djgpp') && (matrix.compiler != 'powerpc64-gcc') }}
       run: |
         if [[ ${{ matrix.compiler }} = djgpp* ]]; then
           # Setup dosemu as testing tool
