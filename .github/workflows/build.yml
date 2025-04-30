@@ -187,14 +187,19 @@ jobs:
     - name: Prepare test results
       if: ${{ (runner.os == 'Linux' || runner.os == 'macOS') && !startsWith(matrix.compiler, 'djgpp') && (matrix.compiler != 'powerpc64-gcc') }}
       run: |
+        echo before if
         if [[ ${{ matrix.compiler }} = djgpp* ]]; then
+          echo inside if
           # Setup dosemu as testing tool
           export LOG_COMPILER="dosemu"
           export AM_LOG_FLAGS="-dumb $f"
         fi
+        echo after if
         # -j1 is there to fix race conditions when building checks and then running dosemu
-        cat Makefile|grep '^MAKE '
+        cat Makefile | grep '^MAKE '
+        echo betweem cat
         cat qemu-wrapper.sh
+        echo before make
         make -j1 check
 
     - name: Show test results
