@@ -20,6 +20,9 @@ CKemuopl::~CKemuopl()
 void CKemuopl::update(short *buf, int samples)
 {
   int i;
+
+  if (samples <= 0) return;
+
   //ensure that our mix buffers are adequately sized
   if(mixbufSamples < samples) {
     if(mixbufSamples) { delete[] mixbuf0; delete[] mixbuf1; delete[] mixbuf2; }
