@@ -1,7 +1,7 @@
 #include "kemuopl.h"
 
 CKemuopl::CKemuopl(int rate, bool bit16, bool usestereo)
-  : use16bit(bit16), stereo(usestereo), sampleerate(rate), mixbufSamples(0)
+  : use16bit(bit16), stereo(usestereo), sampleerate(rate), mixbuf0(0), mixbuf1(0), mixbuf2(0), mixbufSamples(0)
 {
   memset (ctx, 0, sizeof (ctx));
   currType = TYPE_DUAL_OPL2;
