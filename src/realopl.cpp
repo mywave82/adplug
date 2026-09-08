@@ -72,7 +72,7 @@ static __inline void outb(unsigned char value, unsigned short int port) {
 #endif
 
 CRealopl::CRealopl(unsigned short initport)
-  : adlport(initport), hardvol(0), bequiet(false), nowrite(false) {
+  : adlport(initport), hardvol(0), oldvol(0), bequiet(false), nowrite(false) {
   for (int i = 0; i < 22; i++) {
     hardvols[0][i][0] = 0;
     hardvols[0][i][1] = 0;
