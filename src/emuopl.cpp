@@ -20,6 +20,7 @@
  */
 
 #include "emuopl.h"
+#include <cstring>
 
 CEmuopl::CEmuopl(int rate, bool bit16, bool usestereo)
   : use16bit(bit16), stereo(usestereo), mixbufSamples(0)
