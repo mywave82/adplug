@@ -92,6 +92,7 @@ void CEmuopl::update(short *buf, int samples)
     break;
 
   case TYPE_OPL3:	// unsupported
+    memset (outbuf, 0, samples * 4);
     break;
 
   case TYPE_DUAL_OPL2:
