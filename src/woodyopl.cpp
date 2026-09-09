@@ -847,7 +847,8 @@ void OPLChipClass::adlib_write(Bitu idx, Bit8u val) {
 			change_frequency(chanbase,modbase+3,&op[opbase+9]);
 #if defined(OPLTYPE_IS_OPL3)
 			// for 4op channels all four operators are modified to the frequency of the channel
-			if ((adlibreg[0x105]&1) && op[second_set?(base+18):base].is_4op) {
+			if ((adlibreg[0x105]&1) && op[second_set?(base+18):base].is_4op && (opbase < (MAXOPERATORS-3-9))) { // verify opbase, to make static code-analyzers happy; is_4op should never be true for opbase out of range
+
 				change_frequency(chanbase,modbase+8,&op[opbase+3]);
 				change_frequency(chanbase,modbase+3+8,&op[opbase+3+9]);
 			}
@@ -913,7 +914,7 @@ void OPLChipClass::adlib_write(Bitu idx, Bit8u val) {
 				enable_operator(modbase+3,&op[opbase+9],OP_ACT_NORMAL);	// carrier (if 2op)
 #if defined(OPLTYPE_IS_OPL3)
 				// for 4op channels all four operators are switched on
-				if ((adlibreg[0x105]&1) && op[opbase].is_4op) {
+				if ((adlibreg[0x105]&1) && op[opbase].is_4op && (opbase < (MAXOPERATORS-3-9))) { // verify opbase, to make static code-analyzers happy; is_4op should never be true for opbase out of range
 					// turn on chan+3 operators as well
 					enable_operator(modbase+8,&op[opbase+3],OP_ACT_NORMAL);
 					enable_operator(modbase+3+8,&op[opbase+3+9],OP_ACT_NORMAL);
@@ -925,7 +926,7 @@ void OPLChipClass::adlib_write(Bitu idx, Bit8u val) {
 				disable_operator(&op[opbase+9],OP_ACT_NORMAL);
 #if defined(OPLTYPE_IS_OPL3)
 				// for 4op channels all four operators are switched off
-				if ((adlibreg[0x105]&1) && op[opbase].is_4op) {
+				if ((adlibreg[0x105]&1) && op[opbase].is_4op && (opbase < (MAXOPERATORS-3-9))) { // verify opbase, to make static code-analyzers happy; is_4op should never be true for opbase out of range
 					// turn off chan+3 operators as well
 					disable_operator(&op[opbase+3],OP_ACT_NORMAL);
 					disable_operator(&op[opbase+3+9],OP_ACT_NORMAL);
@@ -941,7 +942,7 @@ void OPLChipClass::adlib_write(Bitu idx, Bit8u val) {
 			change_frequency(chanbase,modbase+3,&op[opbase+9]);
 #if defined(OPLTYPE_IS_OPL3)
 			// for 4op channels all four operators are modified to the frequency of the channel
-			if ((adlibreg[0x105]&1) && op[second_set?(base+18):base].is_4op) {
+			if ((adlibreg[0x105]&1) && op[second_set?(base+18):base].is_4op && (opbase < (MAXOPERATORS-3-9))) { // verify base, to make static code-analyzers happy; is_4op should nevber be true for opbase out of range
 				// change frequency calculations of chan+3 operators as well
 				change_frequency(chanbase,modbase+8,&op[opbase+3]);
 				change_frequency(chanbase,modbase+3+8,&op[opbase+3+9]);
